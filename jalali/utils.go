@@ -71,7 +71,7 @@ func d2j(jdn int) (PersianCalendar, error) {
 			// The first 6 months.
 			jm := 1 + div(k, 31)
 			jd := mod(k, 31) + 1
-			return Date(jy,jm, jd), nil
+			return Date(jy,jm, jd,0,0,0), nil
 		}
 		// The remaining months.
 		k -= 186
@@ -85,7 +85,7 @@ func d2j(jdn int) (PersianCalendar, error) {
 	}
 	jm := 7 + div(k, 30)
 	jd := mod(k, 30) + 1
-	return Date(jy, jm, jd), nil
+	return Date(jy, jm, jd,0,0,0), nil
 	//return c.Date(jy, jm,jd), nil
 }
 
@@ -106,7 +106,7 @@ func d2g(jdn int) PersianCalendar {
 	gd := div(mod(i, 153), 5) + 1
 	gm := mod(div(i, 153), 12) + 1
 	gy := div(j, 1461) - 100100 + div(8-gm, 6)
-	return Date(gy, gm,gd)
+	return Date(gy, gm,gd,0,0,0)
 }
 
 func div(a, b int) int {
