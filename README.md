@@ -4,7 +4,7 @@ A simple calendar for use in projects that need to work with the solar calendar,
 ## Quick Start
 
 ``` code
-import	"majidzarephysics/persian-cal"
+import	"majidzarephysics/cal/persian-cal"
 ```
 
 you can get jalali time from system unix time
