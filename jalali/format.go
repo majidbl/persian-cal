@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-//func (c PersianCalendar) Format(format string) string {
+//func (c Calendar) Format(format string) string {
 //	r := strings.NewReplacer(
 //		"yyyy", strconv.Itoa(c.GetYear()),
 //		//"yyy", strconv.Itoa(c.GetYear()),
@@ -38,7 +38,7 @@ import (
 //	return r.Replace(format)
 //}
 
-func (c PersianCalendar) Format(format string) string {
+func (c Calendar) Format(format string) string {
 	r := strings.NewReplacer(
 		// Eng Format ......
 		// Year

@@ -54,14 +54,14 @@ func j2d(jy, jm, jd int) (jdn int, err error) {
 }
 
 //d2j convert Jalali dey() Number to Jalali Date
-func d2j(jdn int) (PersianCalendar, error) {
+func d2j(jdn int) (Calendar, error) {
 	cal := d2g(jdn) // Calculate Gregorian year() (gy).
 	jy := cal.GetYear() - 621
 	leap, _, march, err := jalali(jy)
 	jdn1f := g2d(cal.GetYear(), 3, march)
 
 	if err != nil {
-		return PersianCalendar{}, err
+		return Calendar{}, err
 	}
 
 	// Find number of days that passed since first dey() of jalali years (1 Farvardin) .
@@ -99,7 +99,7 @@ func g2d(gy, gm, gd int) int {
 }
 
 //d2g  convert Georgian dey() Number to Georgian Date
-func d2g(jdn int) PersianCalendar {
+func d2g(jdn int) Calendar {
 	j := 4*jdn + 139361631
 	j = j + div(div(4*jdn+183187720, 146097)*3, 4)*4 - 3908
 	i := div(mod(j, 1461), 4)*5 + 308

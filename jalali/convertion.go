@@ -10,7 +10,7 @@ import (
 var breaks = [...]int{-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210,
 	1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178}
 
-type PersianCalendar struct {
+type Calendar struct {
 	year    int
 	month   int
 	day     int
@@ -23,7 +23,7 @@ type PersianCalendar struct {
 
 // ToJalali converts Gregorian to Jalali date. Error is not nil if Jalali
 // year() passed to function is not valid.
-func ToJalali(gy, gm, gd int) (PersianCalendar, error) {
+func ToJalali(gy, gm, gd int) (Calendar, error) {
 	c, err := d2j(g2d(gy, gm, gd))
 	return c, err
 }
@@ -35,7 +35,7 @@ func ToJalali(gy, gm, gd int) (PersianCalendar, error) {
 
 // ToGregorian converts Jalali to Gregorian date. Error is not nil if Jalali
 // year() passed to function is not valid.
-func (c PersianCalendar) ToGregorian() (PersianCalendar, error) {
+func (c Calendar) ToGregorian() (Calendar, error) {
 	jdn, err := j2d(c.GetYear(), c.GetMonth(), c.GetDay())
 	if err != nil {
 		return New(), err
@@ -93,82 +93,82 @@ func jalali(jy int) (int, int, int, error) {
 	return leap, gy, march, nil
 }
 
-func (c PersianCalendar) GetYear() int {
+func (c Calendar) GetYear() int {
 	return c.year
 }
 
-func (c PersianCalendar) GetDay() int {
+func (c Calendar) GetDay() int {
 	return c.day
 }
-func (c PersianCalendar) GetMonth() int {
+func (c Calendar) GetMonth() int {
 	return c.month
 }
 
-func (c PersianCalendar) GetHour() int {
+func (c Calendar) GetHour() int {
 	return c.hour
 }
 
-func (c PersianCalendar) GetMinute() int {
+func (c Calendar) GetMinute() int {
 	return c.min
 }
-func (c PersianCalendar) GetSecond() int {
+func (c Calendar) GetSecond() int {
 	return c.sec
 }
 
-func (c PersianCalendar) GetWeekday() time.Weekday {
+func (c Calendar) GetWeekday() time.Weekday {
 	return c.weekDay
 }
 
-func (c PersianCalendar) GetLocation() *time.Location {
+func (c Calendar) GetLocation() *time.Location {
 	return c.loc
 }
 
-func (c PersianCalendar) SetYear(y int) PersianCalendar {
+func (c Calendar) SetYear(y int) Calendar {
 	c.year = y
 	return c
 }
 
-func (c PersianCalendar) SetDay(d int) PersianCalendar {
+func (c Calendar) SetDay(d int) Calendar {
 	c.day = d
 	return c
 }
-func (c PersianCalendar) SetMonth(m int) PersianCalendar {
+func (c Calendar) SetMonth(m int) Calendar {
 	c.month = m
 	return c
 }
 
-func (c PersianCalendar) SetHour(h int) PersianCalendar {
+func (c Calendar) SetHour(h int) Calendar {
 	c.hour = h
 	return c
 }
 
-func (c PersianCalendar) SetMinute(m int) PersianCalendar {
+func (c Calendar) SetMinute(m int) Calendar {
 	c.min = m
 	return c
 }
-func (c PersianCalendar) SetSecond(s int) PersianCalendar {
+func (c Calendar) SetSecond(s int) Calendar {
 	c.sec = s
 	return c
 }
 
-func (c PersianCalendar) SetWeekday(wd time.Weekday) PersianCalendar {
+func (c Calendar) SetWeekday(wd time.Weekday) Calendar {
 	c.weekDay = wd
 	return c
 }
 
-func (c PersianCalendar) SetLocation(l *time.Location) PersianCalendar {
+func (c Calendar) SetLocation(l *time.Location) Calendar {
 	c.loc = l
 	return c
 }
 
 // New return empty calendar
-func New() PersianCalendar {
-	return PersianCalendar{}
+func New() Calendar {
+	return Calendar{}
 }
 
 // Date return arbitrary date time
-func Date(year, month, day, hour, min, sec int) PersianCalendar {
-	c := PersianCalendar{}
+func Date(year, month, day, hour, min, sec int) Calendar {
+	c := Calendar{}
 	return c.
 		SetYear(year).
 		SetMonth(month).
@@ -189,14 +189,14 @@ func Iran() *time.Location {
 }
 
 // Unix convert Unix Time to Jalali Date
-func Unix(unixDate int64) (PersianCalendar, error) {
+func Unix(unixDate int64) (Calendar, error) {
 	unixTimeUTC := time.Unix(unixDate, 0) //gives unix time stamp in utc
 	c, err := d2j(g2d(unixTimeUTC.Year(), int(unixTimeUTC.Month()), unixTimeUTC.Day()))
 	return c, err
 }
 
 // Now get system time as unix form and return it to persian calendar
-func Now() PersianCalendar {
+func Now() Calendar {
 	c, _ := Unix(time.Now().Unix())
 	return c.SetHour(time.Now().Hour()).
 		SetMinute(time.Now().Minute()).
@@ -204,7 +204,7 @@ func Now() PersianCalendar {
 }
 
 // JTU convert persian calendar to unix format
-func JTU(cal PersianCalendar) int64 {
+func JTU(cal Calendar) int64 {
 	jt, _ := cal.ToGregorian()
 	gt := time.Date(jt.GetYear(), time.Month(jt.GetMonth()), jt.GetDay(), 12, 15, 60, 0, time.UTC)
 	return gt.Unix()
@@ -212,7 +212,7 @@ func JTU(cal PersianCalendar) int64 {
 
 // JDiff calculate difference between two jalali time
 // in function determine what date is exceeded another date
-func (c PersianCalendar) JDiff(cal PersianCalendar) int64 {
+func (c Calendar) JDiff(cal Calendar) int64 {
 	var e, b int64
 	if c.GetYear() >= cal.GetYear() && c.GetMonth() >= cal.GetMonth() && c.GetDay() >= cal.GetDay() {
 		b = JTU(cal)
@@ -225,11 +225,11 @@ func (c PersianCalendar) JDiff(cal PersianCalendar) int64 {
 }
 
 // MonthEnName return persian month name in english lang
-func (c PersianCalendar) MonthEnName() string {
+func (c Calendar) MonthEnName() string {
 	return toEng(c.month)
 }
 
 // MonthPersianName return persian month name in farsi lang
-func (c PersianCalendar) MonthPersianName() string {
+func (c Calendar) MonthPersianName() string {
 	return toPersian(c.month)
 }
